@@ -117,10 +117,25 @@ Button4.TextColor3 = Color3.fromRGB(255, 255, 255)
 Button4.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 Button4.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button4.Size = UDim2.new(0, 127, 0, 41)
-Button4.Position = UDim2.new(0, 20, 0.59, 0)
+Button4.Position = UDim2.new(0, 20, 0.58, 4)
 Button4.BackgroundTransparency = 0
 Button4.BorderSizePixel = 0
 Button4.Visible = true
+
+local Button5 = Instance.new("TextButton")
+Button5.Parent = UI
+Button5.Name = "Walkspeed 50"
+Button5.Text = "Walkspeed 50"
+Button5.TextScaled = true
+Button5.FontFace = Font.fromName("Sarpanch")
+Button5.TextColor3 = Color3.fromRGB(255, 255, 255)
+Button5.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Button5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Button5.Size = UDim2.new(0, 127, 0, 41)
+Button5.Position = UDim2.new(0, 20, 0.72, 1)
+Button5.BackgroundTransparency = 0
+Button5.BorderSizePixel = 0
+Button5.Visible = true
 
 local UICorner = Instance.new("UICorner")
 UICorner.Parent = Button1
@@ -136,6 +151,10 @@ UICorner.CornerRadius = UDim.new(0, 8)
 
 local UICorner = Instance.new("UICorner")
 UICorner.Parent = Button4
+UICorner.CornerRadius = UDim.new(0, 8)
+
+local UICorner = Instance.new("UICorner")
+UICorner.Parent = Button5
 UICorner.CornerRadius = UDim.new(0, 8)
 
 local TweenService = game:GetService("TweenService")
@@ -611,6 +630,36 @@ Button4.MouseButton1Click:Connect(function()
 	game.StarterGui:SetCore("SendNotification", {
 		Title = "X-ray Script Enabled",
 		Text = "Press 4 to toggle on and untoggle",
+		Duration = 10,
+		Icon = "rbxassetid://74923328535351",
+		Button1 = "Ok"
+	})
+end)
+
+Button5.MouseButton1Click:Connect(function()
+	local player = game.Players.LocalPlayer
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:WaitForChild("Humanoid")
+
+	local toggleKey = Enum.KeyCode.Five
+	local speedOn = 50
+	local speedOff = 16
+
+	local isOn = false
+	player.CharacterAdded:Connect(function(char)
+		character = char
+		humanoid = char:WaitForChild("Humanoid")
+	end)
+	game:GetService("UserInputService").InputBegan:Connect(function(input, gpe)
+		if gpe then return end
+		if input.KeyCode == toggleKey then
+			isOn = not isOn
+			humanoid.WalkSpeed = isOn and speedOn or speedOff
+		end
+	end)
+	game.StarterGui:SetCore("SendNotification", {
+		Title = "Walkspeed 50 Script Enabled",
+		Text = "Press 5 to toggle on and untoggle",
 		Duration = 10,
 		Icon = "rbxassetid://74923328535351",
 		Button1 = "Ok"
