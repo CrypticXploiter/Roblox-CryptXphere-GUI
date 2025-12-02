@@ -12,7 +12,6 @@ UI.Position = UDim2.new(0, 2, 0, 531.5)
 UI.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 UI.BorderColor3 = Color3.fromRGB(0, 0, 0)
 UI.BorderSizePixel = 0
-UI.BackgroundTransparency = 0
 UI.Draggable = true
 UI.Active = true
 
@@ -69,11 +68,11 @@ Button1.Text = "Fly"
 Button1.TextSize = 25
 Button1.FontFace = Font.fromName("Sarpanch")
 Button1.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button1.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Button1.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Button1.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button1.Size = UDim2.new(0, 127, 0, 41)
 Button1.Position = UDim2.new(0, 20, 0.20, 0)
-Button1.BackgroundTransparency = 0
+Button1.BackgroundTransparency = 0.65
 Button1.BorderSizePixel = 0
 Button1.Visible = true
 
@@ -84,11 +83,11 @@ Button2.Text = "No-clip"
 Button2.TextSize = 25
 Button2.FontFace = Font.fromName("Sarpanch")
 Button2.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button2.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Button2.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Button2.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button2.Size = UDim2.new(0, 127, 0, 41)
 Button2.Position = UDim2.new(0, 20, 0.33, 0)
-Button2.BackgroundTransparency = 0
+Button2.BackgroundTransparency = 0.65
 Button2.BorderSizePixel = 0
 Button2.Visible = true
 
@@ -99,11 +98,11 @@ Button3.Text = "ESP"
 Button3.TextSize = 25
 Button3.FontFace = Font.fromName("Sarpanch")
 Button3.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button3.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Button3.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Button3.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button3.Size = UDim2.new(0, 127, 0, 41)
 Button3.Position = UDim2.new(0, 20, 0.45, 4)
-Button3.BackgroundTransparency = 0
+Button3.BackgroundTransparency = 0.65
 Button3.BorderSizePixel = 0
 Button3.Visible = true
 
@@ -114,11 +113,11 @@ Button4.Text = "X-ray"
 Button4.TextSize = 25
 Button4.FontFace = Font.fromName("Sarpanch")
 Button4.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button4.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Button4.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Button4.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button4.Size = UDim2.new(0, 127, 0, 41)
 Button4.Position = UDim2.new(0, 20, 0.58, 4)
-Button4.BackgroundTransparency = 0
+Button4.BackgroundTransparency = 0.65
 Button4.BorderSizePixel = 0
 Button4.Visible = true
 
@@ -129,11 +128,11 @@ Button5.Text = "Walkspeed 50"
 Button5.TextScaled = true
 Button5.FontFace = Font.fromName("Sarpanch")
 Button5.TextColor3 = Color3.fromRGB(255, 255, 255)
-Button5.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Button5.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 Button5.BorderColor3 = Color3.fromRGB(0, 0, 0)
 Button5.Size = UDim2.new(0, 127, 0, 41)
 Button5.Position = UDim2.new(0, 20, 0.72, 1)
-Button5.BackgroundTransparency = 0
+Button5.BackgroundTransparency = 0.65
 Button5.BorderSizePixel = 0
 Button5.Visible = true
 
@@ -187,7 +186,7 @@ local tweenInfo = TweenInfo.new(
 )
 local slideTween = TweenService:Create(Frame, tweenInfo, {
 	Position = originalPos,
-	BackgroundTransparency = 0
+	BackgroundTransparency = 0.1
 })
 slideTween:Play()
 
@@ -208,6 +207,38 @@ for _, child in ipairs(Frame:GetDescendants()) do
 		}):Play()
 	end
 end
+
+local TweenService = game:GetService("TweenService")
+local container = UI
+local normalColor = Color3.fromRGB(50, 50, 50)
+local hoverColor  = Color3.fromRGB(100, 100, 100) 
+local tweenInfo = TweenInfo.new(
+	0.25, 
+	Enum.EasingStyle.Quad,
+	Enum.EasingDirection.Out
+)
+local function setupButton(button)
+	if not button:IsA("TextButton") and not button:IsA("ImageButton") then
+		return
+	end
+
+	local fadeToHover = TweenService:Create(button, tweenInfo, {BackgroundColor3 = hoverColor})
+	local fadeToNormal = TweenService:Create(button, tweenInfo, {BackgroundColor3 = normalColor})
+
+	button.MouseEnter:Connect(function()
+		fadeToHover:Play()
+	end)
+
+	button.MouseLeave:Connect(function()
+		fadeToNormal:Play()
+	end)
+end
+for _, obj in ipairs(container:GetDescendants()) do
+	setupButton(obj)
+end
+container.DescendantAdded:Connect(function(obj)
+	setupButton(obj)
+end)
 
 Button1.MouseButton1Click:Connect(function()
 	local UIS = game:GetService("UserInputService")
